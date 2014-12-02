@@ -3,17 +3,13 @@ package dev.shoulongli.appframework.oauth.google;
 /**
  * Created by shoulongli on 12/1/14.
  */
-import java.io.InputStream;
+
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -36,6 +32,7 @@ import com.google.android.gms.plus.model.people.Person;
 
 import dev.shoulongli.appframework.R;
 
+//http://www.androidhive.info/2014/02/android-login-with-google-plus-account-1/
 public class GoogleLoginActivity2 extends Activity implements OnClickListener,
         ConnectionCallbacks, OnConnectionFailedListener {
 
@@ -103,7 +100,7 @@ public class GoogleLoginActivity2 extends Activity implements OnClickListener,
 
     /**
      * Method to resolve any signin errors
-     * */
+     */
     private void resolveSignInError() {
         if (mConnectionResult.hasResolution()) {
             try {
@@ -169,7 +166,7 @@ public class GoogleLoginActivity2 extends Activity implements OnClickListener,
 
     /**
      * Updating the UI, showing/hiding buttons and profile layout
-     * */
+     */
     private void updateUI(boolean isSignedIn) {
         if (isSignedIn) {
             btnSignIn.setVisibility(View.GONE);
@@ -186,7 +183,7 @@ public class GoogleLoginActivity2 extends Activity implements OnClickListener,
 
     /**
      * Fetching user's information name, email, profile pic
-     * */
+     */
     private void getProfileInformation() {
         try {
             if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
@@ -232,7 +229,7 @@ public class GoogleLoginActivity2 extends Activity implements OnClickListener,
 
     /**
      * Button on click listener
-     * */
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -253,7 +250,7 @@ public class GoogleLoginActivity2 extends Activity implements OnClickListener,
 
     /**
      * Sign-in into google
-     * */
+     */
     private void signInWithGplus() {
         if (!mGoogleApiClient.isConnecting()) {
             mSignInClicked = true;
@@ -263,7 +260,7 @@ public class GoogleLoginActivity2 extends Activity implements OnClickListener,
 
     /**
      * Sign-out from google
-     * */
+     */
     private void signOutFromGplus() {
         if (mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
@@ -275,7 +272,7 @@ public class GoogleLoginActivity2 extends Activity implements OnClickListener,
 
     /**
      * Revoking access from google
-     * */
+     */
     private void revokeGplusAccess() {
         if (mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);

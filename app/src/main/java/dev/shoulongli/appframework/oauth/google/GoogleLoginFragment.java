@@ -5,7 +5,6 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.Plus.PlusOptions;
 import com.google.android.gms.plus.model.people.Person;
@@ -22,20 +21,21 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import dev.shoulongli.appframework.R;
+
 /**
  * Created by shoulongli on 12/2/14.
  */
 
 //https://github.com/rakyll/google-play-services/blob/master/samples/wallet/src/com/google/android/gms/samples/wallet/LoginFragment.java
-
+//https://github.com/googlewallet/instantbuy-android/blob/master/src/com/google/android/gms/samples/wallet/LoginFragment.java
 public class GoogleLoginFragment extends Fragment implements
         OnClickListener, ConnectionCallbacks, OnConnectionFailedListener {
 
+    public static final String EXTRA_ACTION = "EXTRA_ACTION";
+
     public static final int REQUEST_CODE_RESOLVE_ERR = 1005;
     private static final String KEY_SIGNIN_BUTTON_CLICKED = "KEY_SIGNIN_BUTTON_CLICKED";
-    private static final String WALLET_SANDBOX_SCOPE =
-            "https://www.googleapis.com/auth/paymentssandbox.make_payments";
-
     private ProgressDialog mProgressDialog;
     private boolean mSignInButtonClicked = false;
     private GoogleApiClient mGoogleApiClient;
@@ -45,7 +45,7 @@ public class GoogleLoginFragment extends Fragment implements
     public static GoogleLoginFragment newInstance(int loginAction) {
         GoogleLoginFragment fragment = new GoogleLoginFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(LoginActivity.EXTRA_ACTION, loginAction);
+        bundle.putInt(EXTRA_ACTION, loginAction);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -53,21 +53,26 @@ public class GoogleLoginFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (savedInstanceState != null) {
             mSignInButtonClicked = savedInstanceState.getBoolean(KEY_SIGNIN_BUTTON_CLICKED);
         }
         Bundle args = getArguments();
         if (args != null) {
-            mLoginAction = args.getInt(LoginActivity.EXTRA_ACTION);
+            mLoginAction = args.getInt(EXTRA_ACTION);
         }
         PlusOptions options = PlusOptions.builder().build();
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addApi(Plus.API, options)
+        mGoogleApiClient = buildGoogleApiClient();
+    }
+
+    private GoogleApiClient buildGoogleApiClient() {
+        // When we build the GoogleApiClient we specify where connected and
+        // connection failed callbacks should be returned, which Google APIs our
+        // app uses and which OAuth 2.0 scopes our app requests.
+        return new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
-                .addScope(Plus.SCOPE_PLUS_PROFILE)
-                .addScope(new Scope(WALLET_SANDBOX_SCOPE))
+                .addApi(Plus.API, Plus.PlusOptions.builder().build())
+                .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .build();
     }
 
@@ -80,14 +85,11 @@ public class GoogleLoginFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_google_login, container, false);
         mProgressDialog = initializeProgressDialog();
-
         SignInButton signInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_WIDE);
         signInButton.setOnClickListener(this);
-
-        view.findViewById(R.id.button_login_bikestore).setOnClickListener(this);
         return view;
     }
 
@@ -137,13 +139,9 @@ public class GoogleLoginFragment extends Fragment implements
                 if (mConnectionResult != null) {
                     resolveConnection();
                 } else {
-                    // for cases when button is clicked before any connection result
+// for cases when button is clicked before any connection result
                     mSignInButtonClicked = true;
                 }
-                break;
-            case R.id.button_login_bikestore:
-                Toast.makeText(getActivity(), R.string.login_bikestore_message, Toast.LENGTH_LONG)
-                        .show();
                 break;
         }
     }
@@ -151,7 +149,7 @@ public class GoogleLoginFragment extends Fragment implements
     @Override
     public void onConnected(Bundle connectionHint) {
         dismissProgressDialog();
-        if (mLoginAction == LoginActivity.Action.LOGOUT) {
+        if (mLoginAction == Action.LOGOUT) {
             logOut();
         } else {
             mSignInButtonClicked = false;
@@ -161,8 +159,8 @@ public class GoogleLoginFragment extends Fragment implements
 
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        // Save the intent so that we can start an activity when the user clicks
-        // the sign-in button.
+// Save the intent so that we can start an activity when the user clicks
+// the sign-in button.
         mConnectionResult = result;
         if (mSignInButtonClicked) {
             resolveConnection();
@@ -189,10 +187,8 @@ public class GoogleLoginFragment extends Fragment implements
             } else {
                 Toast.makeText(getActivity(), getString(R.string.welcome_user,
                         user.getDisplayName()), Toast.LENGTH_LONG).show();
-
-                ((BikestoreApplication) getActivity().getApplication()).login(accountName);
-                getActivity().setResult(Activity.RESULT_OK);
-                getActivity().finish();
+                //add code here
+                //TODO
             }
         }
     }
@@ -200,12 +196,9 @@ public class GoogleLoginFragment extends Fragment implements
     private void logOut() {
         if (mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-            ((BikestoreApplication) getActivity().getApplication()).logout();
             mGoogleApiClient.disconnect();
-            Toast.makeText(getActivity(), getString(R.string.logged_out), Toast.LENGTH_LONG)
-                    .show();
-            getActivity().setResult(Activity.RESULT_OK);
-            getActivity().finish();
+            //add code here
+            //TODO
         }
     }
 
@@ -230,6 +223,14 @@ public class GoogleLoginFragment extends Fragment implements
 
     @Override
     public void onConnectionSuspended(int cause) {
-        // nothing specifically required here, onConnected will be called when connection resumes
+// nothing specifically required here, onConnected will be called when connection resumes
+    }
+
+    public static class Action {
+        public static final int LOGIN = 2000;
+        public static final int LOGOUT = 2001;
+
+        private Action() {
+        }
     }
 }

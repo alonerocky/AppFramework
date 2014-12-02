@@ -29,5 +29,10 @@
     <string name="close">Close</string>
     <string name="profile_picture">User\'s profile picture.</string>
 
+    <string name="network_error">An error occurring while contacting Google. Please try again later.</string>
+    <string name="permission_denied_message">Permission to fetch Google profile information denied. Cannot login.</string>
+    <string name="welcome_user">Welcome, %s.</string>
+    <string name="logged_out">You are now logged out</string>
+    <string name="loading">Loading&#8230;</string>
 
 </resources>
