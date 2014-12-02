@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -210,7 +211,8 @@ public class GoogleLoginActivity2 extends Activity implements OnClickListener,
                         personPhotoUrl.length() - 2)
                         + PROFILE_PIC_SIZE;
 
-                new LoadProfileImage(imgProfilePic).execute(personPhotoUrl);
+                //new LoadProfileImage(imgProfilePic).execute(personPhotoUrl);
+                Glide.with(this).load(personPhotoUrl).into(imgProfilePic);
 
             } else {
                 Toast.makeText(getApplicationContext(),
@@ -290,32 +292,5 @@ public class GoogleLoginActivity2 extends Activity implements OnClickListener,
         }
     }
 
-    /**
-     * Background Async task to load user profile picture from url
-     * */
-    private class LoadProfileImage extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public LoadProfileImage(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
 
 }
