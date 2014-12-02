@@ -49,9 +49,12 @@
             android:name="dev.shoulongli.appframework.oauth.facebook.FBLoginActivity"
             android:label="Facebook Login" />
         <activity
-            android:name="dev.shoulongli.appframework.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
+            android:name="dev.shoulongli.appframework.oauth.google.GoogleLoginActivity"
+            android:label="@string/title_activity_google_login" >
+        </activity>
+        <activity
+            android:name="dev.shoulongli.appframework.oauth.google.GoogleLoginActivity2"
+            android:label="@string/title_activity_google_login" >
         </activity>
     </application>
 

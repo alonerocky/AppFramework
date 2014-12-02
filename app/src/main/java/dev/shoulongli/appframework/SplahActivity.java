@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import java.util.logging.Handler;
 
 import dev.shoulongli.appframework.oauth.facebook.FBLoginActivity;
+import dev.shoulongli.appframework.oauth.google.GoogleLoginActivity;
+import dev.shoulongli.appframework.oauth.google.GoogleLoginActivity2;
 
 
 public class SplahActivity extends Activity {
@@ -33,7 +35,8 @@ public class SplahActivity extends Activity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                Intent i = new Intent(SplahActivity.this, FBLoginActivity.class);
+//                Intent i = new Intent(SplahActivity.this, FBLoginActivity.class);
+                Intent i = new Intent(SplahActivity.this, GoogleLoginActivity2.class);
                 startActivity(i);
 
                 // close this activity
