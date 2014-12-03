@@ -8,6 +8,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.People.LoadPeopleResult;
 import com.google.android.gms.plus.Plus;
@@ -44,7 +45,7 @@ public class GoogleLoginActivity extends FragmentActivity implements
         ResultCallback<People.LoadPeopleResult>, View.OnClickListener {
 
     private static final String TAG = "android-plus-quickstart";
-
+    public static final Scope SCOPE_PICASA = new Scope("http://picasaweb.google.com/data/");
     private static final int STATE_DEFAULT = 0;
     private static final int STATE_SIGN_IN = 1;
     private static final int STATE_IN_PROGRESS = 2;
@@ -128,7 +129,7 @@ public class GoogleLoginActivity extends FragmentActivity implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(Plus.API, Plus.PlusOptions.builder().build())
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addScope(Plus.SCOPE_PLUS_LOGIN).addScope(SCOPE_PICASA)
                 .build();
     }
 

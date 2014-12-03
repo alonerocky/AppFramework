@@ -5,6 +5,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.Plus.PlusOptions;
 import com.google.android.gms.plus.model.people.Person;
@@ -33,6 +34,7 @@ public class GoogleLoginFragment extends Fragment implements
         OnClickListener, ConnectionCallbacks, OnConnectionFailedListener {
 
     public static final String EXTRA_ACTION = "EXTRA_ACTION";
+    public static final Scope SCOPE_PICASA = new Scope("http://picasaweb.google.com/data/");
 
     public static final int REQUEST_CODE_RESOLVE_ERR = 1005;
     private static final String KEY_SIGNIN_BUTTON_CLICKED = "KEY_SIGNIN_BUTTON_CLICKED";
@@ -41,6 +43,7 @@ public class GoogleLoginFragment extends Fragment implements
     private GoogleApiClient mGoogleApiClient;
     private ConnectionResult mConnectionResult;
     private int mLoginAction;
+    private SignInButton signInButton;
 
     public static GoogleLoginFragment newInstance(int loginAction) {
         GoogleLoginFragment fragment = new GoogleLoginFragment();
@@ -72,7 +75,7 @@ public class GoogleLoginFragment extends Fragment implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(Plus.API, Plus.PlusOptions.builder().build())
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addScope(Plus.SCOPE_PLUS_LOGIN).addScope(SCOPE_PICASA)
                 .build();
     }
 
@@ -87,7 +90,7 @@ public class GoogleLoginFragment extends Fragment implements
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_google_login, container, false);
         mProgressDialog = initializeProgressDialog();
-        SignInButton signInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
+        signInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_WIDE);
         signInButton.setOnClickListener(this);
         return view;
@@ -189,6 +192,7 @@ public class GoogleLoginFragment extends Fragment implements
                         user.getDisplayName()), Toast.LENGTH_LONG).show();
                 //add code here
                 //TODO
+                signInButton.setVisibility(View.GONE);
             }
         }
     }

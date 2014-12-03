@@ -26,6 +26,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
@@ -36,6 +37,7 @@ import dev.shoulongli.appframework.R;
 public class GoogleLoginActivity2 extends Activity implements OnClickListener,
         ConnectionCallbacks, OnConnectionFailedListener {
 
+    public static final Scope SCOPE_PICASA = new Scope("http://picasaweb.google.com/data/");
     private static final int RC_SIGN_IN = 0;
     // Logcat tag
     private static final String TAG = "MainActivity";
@@ -83,7 +85,9 @@ public class GoogleLoginActivity2 extends Activity implements OnClickListener,
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this).addApi(Plus.API, Plus.PlusOptions.builder().build())
-                .addScope(Plus.SCOPE_PLUS_LOGIN).build();
+                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addScope(SCOPE_PICASA)
+                .build();
     }
 
     protected void onStart() {
