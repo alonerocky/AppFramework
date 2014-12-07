@@ -36,7 +36,7 @@ public class SplahActivity extends Activity {
                 // This method will be executed once the timer is over
                 // Start your app main activity
 //                Intent i = new Intent(SplahActivity.this, FBLoginActivity.class);
-                Intent i = new Intent(SplahActivity.this, GoogleLoginActivity2.class);
+                Intent i = new Intent(SplahActivity.this, GoogleLoginActivity.class);
                 startActivity(i);
 
                 // close this activity
